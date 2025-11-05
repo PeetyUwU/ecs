@@ -1,9 +1,6 @@
 use std::{any::TypeId, collections::HashMap};
 
-use crate::ecs::{
-    component::{self, Component},
-    entity::Entity,
-};
+use crate::ecs::{component::Component, entity::Entity};
 
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct ArchetypeId {
