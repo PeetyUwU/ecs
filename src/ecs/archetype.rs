@@ -1,7 +1,7 @@
 use std::{any::TypeId, collections::HashMap};
 
 use crate::ecs::{
-    column::{self, Column, ColumnTrait},
+    column::ColumnTrait,
     component::Component,
     entity::Entity,
 };

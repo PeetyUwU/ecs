@@ -1,8 +1,6 @@
-use std::any::{Any, TypeId};
+use std::any::Any;
 
-use crate::ecs::component::{self, Component};
-use std::collections::HashMap;
-use std::sync::{Mutex, OnceLock};
+use crate::ecs::component::Component;
 
 pub struct Column<T: Component> {
     data: Vec<T>,
