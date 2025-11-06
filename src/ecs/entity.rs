@@ -2,8 +2,8 @@ use std::collections::VecDeque;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Entity {
-    id: u32,
-    generation: u32,
+    pub id: u32,
+    pub generation: u32,
 }
 
 pub struct EntityManager {
