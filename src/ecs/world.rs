@@ -19,6 +19,18 @@ impl World {
     pub fn add_resource(&mut self, resource: impl Any) {
         self.resources.add_resource(resource);
     }
+
+    pub fn get_resource<T: Any>(&self) -> Option<&T> {
+        self.resources.get_resource::<T>()
+    }
+
+    pub fn get_resource_mut<T: Any>(&mut self) -> Option<&mut T> {
+        self.resources.get_resource_mut::<T>()
+    }
+
+    pub fn remove_resource<T: Any>(&mut self) {
+        self.resources.remove_resource::<T>();
+    }
 }
 
 #[cfg(test)]
@@ -34,6 +46,27 @@ mod tests {
         let fps = world.resources.get_resource::<FpsResource>().unwrap();
 
         assert_eq!(fps.0, 60);
+    }
+
+    #[test]
+    fn get_resource() {
+        let world = init_world();
+
+        let fps = world.get_resource::<FpsResource>().unwrap();
+        assert_eq!(fps.0, 60);
+    }
+
+    #[test]
+    fn get_resource_mut() {
+        let mut world = init_world();
+
+        {
+            let fps = world.get_resource_mut::<FpsResource>().unwrap();
+            fps.0 += 1;
+        }
+
+        let fps = world.get_resource::<FpsResource>().unwrap();
+        assert_eq!(fps.0, 61);
     }
 
     fn init_world() -> World {
