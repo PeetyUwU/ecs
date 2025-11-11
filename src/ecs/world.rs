@@ -1,14 +1,10 @@
 use std::{any::Any, collections::HashMap};
 
-use crate::ecs::{
-    archetype::{Archetype, ArchetypeId},
-    resources::Resources,
-};
+use crate::ecs::resources::Resources;
 
 #[derive(Default)]
 pub struct World {
     resources: Resources,
-    archetypes: HashMap<ArchetypeId, Archetype>,
 }
 
 impl World {
