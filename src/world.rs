@@ -177,7 +177,36 @@ mod test {
     }
 
     #[test]
-    fn query_components() {}
+    fn query_components() {
+        let world = init_world();
+
+        // Test querying for Position component
+        let pos_archetypes = world.query_archetypes::<Position>();
+        assert_eq!(pos_archetypes.len(), 2); // Should find 2 archetypes with Position
+
+        // Test querying for Velocity component
+        let vel_archetypes = world.query_archetypes::<Velocity>();
+        assert_eq!(vel_archetypes.len(), 1); // Should find 1 archetype with Velocity
+
+        // Test querying for Team component (none exist yet)
+        let team_archetypes = world.query_archetypes::<Team>();
+        assert_eq!(team_archetypes.len(), 0); // Should find 0 archetypes with Team
+
+        // Test getting components
+        let pos = world.get_component::<Position>(0).unwrap();
+        assert_eq!(pos.x, 1.0);
+        assert_eq!(pos.y, 2.0);
+        assert_eq!(pos.z, 3.0);
+
+        let vel = world.get_component::<Velocity>(1).unwrap();
+        assert_eq!(vel.x, 0.1);
+        assert_eq!(vel.y, 0.2);
+        assert_eq!(vel.z, 0.3);
+
+        // Test getting non-existent component
+        assert!(world.get_component::<Velocity>(0).is_none());
+        assert!(world.get_component::<Team>(0).is_none());
+    }
 
     #[test]
     fn move_archetype() {
