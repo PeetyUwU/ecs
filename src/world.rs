@@ -143,11 +143,13 @@ mod test {
         z: f32,
     }
 
+    #[derive(Default)]
+    struct Team(u8);
+
     #[test]
     fn create_entity() {
         let mut world = World::new();
 
-        // world.register_component::<Position>();
         let entity = world
             .spawn()
             .with(Position {
@@ -178,5 +180,55 @@ mod test {
     fn query_components() {}
 
     #[test]
-    fn move_archetype() {}
+    fn move_archetype() {
+        let mut world = init_world();
+
+        world.add_component(1, Team(2));
+        // Verify entity 1 moved to new archetype with Team component
+        let team = world.get_component::<Team>(1).unwrap();
+        assert_eq!(team.0, 2);
+
+        // Verify entity 1 still has its original components
+        let pos = world.get_component::<Position>(1).unwrap();
+        assert_eq!(pos.x, 4.0);
+        assert_eq!(pos.y, 5.0);
+        assert_eq!(pos.z, 6.0);
+
+        let vel = world.get_component::<Velocity>(1).unwrap();
+        assert_eq!(vel.x, 0.1);
+        assert_eq!(vel.y, 0.2);
+        assert_eq!(vel.z, 0.3);
+
+        // Verify the entity moved to a different archetype
+        let (arch_index, _) = world.entity_index.get(&1).unwrap();
+        assert_ne!(*arch_index, 0); // Should not be in empty archetype anymore
+    }
+
+    fn init_world() -> World {
+        let mut world = World::new();
+
+        world
+            .spawn()
+            .with(Position {
+                x: 1.0,
+                y: 2.0,
+                z: 3.0,
+            })
+            .build();
+        world
+            .spawn()
+            .with(Position {
+                x: 4.0,
+                y: 5.0,
+                z: 6.0,
+            })
+            .with(Velocity {
+                x: 0.1,
+                y: 0.2,
+                z: 0.3,
+            })
+            .build();
+
+        world
+    }
 }
