@@ -12,8 +12,7 @@ pub struct World {
     pub archetypes: Vec<Archetype>,
     pub entity_index: HashMap<Entity, (usize, usize)>, // (Archetypeindex, row)
     archetype_map: HashMap<Vec<TypeId>, usize>,
-    scheduler: Scheduler,
-    event_bus: EventBus,
+    // event_bus: EventBus,
 }
 
 impl World {
@@ -130,12 +129,14 @@ mod test {
 
     use super::*;
 
+    #[derive(Default)]
     struct Position {
         x: f32,
         y: f32,
         z: f32,
     }
 
+    #[derive(Default)]
     struct Velocity {
         x: f32,
         y: f32,
@@ -144,20 +145,33 @@ mod test {
 
     #[test]
     fn create_entity() {
-        let mut world = World::default();
+        let mut world = World::new();
 
         // world.register_component::<Position>();
-        // world.register_component::<Velocity>();
-
-        let entity = world.spawn_entity().with_component::<Position>().build();
+        let entity = world
+            .spawn()
+            .with(Position {
+                x: 1.0,
+                y: 2.0,
+                z: 3.0,
+            })
+            .build();
         let entity2 = world
-            .spawn_entity()
-            .with_component::<Position>()
-            .with_component::<Velocity>()
+            .spawn()
+            .with(Position {
+                x: 4.0,
+                y: 5.0,
+                z: 6.0,
+            })
+            .with(Velocity {
+                x: 0.1,
+                y: 0.2,
+                z: 0.3,
+            })
             .build();
 
-        assert_eq!(entity.id, 0);
-        assert_eq!(entity2.id, 1);
+        assert_eq!(entity, 0);
+        assert_eq!(entity2, 1);
     }
 
     #[test]
