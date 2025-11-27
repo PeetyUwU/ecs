@@ -1,26 +1,25 @@
 use std::{any::TypeId, collections::HashMap};
 
-use crate::component::Component;
+use crate::{component::Component, world::World};
 
-pub struct Entity(u64);
+pub type Entity = u64;
 
-pub struct EntityBuilder {
-    entity: Entity,
-    components: Vec<TypeId>,
+pub struct EntityBuilder<'a> {
+    world: &'a mut World,
+    pub entity: Entity,
 }
 
-impl EntityBuilder {
-    pub fn new(id: u64) -> Self {
-        Self {
-            entity: Entity(id),
-            components: Vec::new(),
-        }
+impl<'a> EntityBuilder<'a> {
+    pub fn new(world: &'a mut World, entity: Entity) -> Self {
+        Self { world, entity }
     }
 
-    pub fn with_component<T: Component>(&mut self) {
-        let type_id: TypeId = TypeId::of::<T>();
-        self.components.push(type_id);
+    pub fn with<T: Component>(self, component: T) -> Self {
+        self.world.add_component(self.entity, component);
+        self
     }
 
-    pub fn build() {}
+    pub fn build(self) -> Entity {
+        self.entity
+    }
 }
