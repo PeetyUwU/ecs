@@ -4,6 +4,7 @@ use crate::{
     archetype::Archetype,
     component::{Component, ComponentBundle},
     entity::{self, Entity, EntityBuilder},
+    resources::{Resource, Resources},
 };
 
 #[derive(Default)]
@@ -12,6 +13,7 @@ pub struct World {
     pub archetypes: Vec<Archetype>,
     pub entity_index: HashMap<Entity, (usize, usize)>, // (Archetypeindex, row)
     archetype_map: HashMap<Vec<TypeId>, usize>,
+    pub resources: Resources,
     // event_bus: EventBus,
 }
 
@@ -22,6 +24,7 @@ impl World {
             archetypes: Vec::new(),
             entity_index: HashMap::new(),
             archetype_map: HashMap::new(),
+            resources: Resources::new(),
         };
         // Create empty archetype
         world.create_archetype(vec![]);
@@ -121,6 +124,18 @@ impl World {
             .filter(|(_, arch)| arch.has::<T>())
             .map(|(i, _)| i)
             .collect()
+    }
+
+    pub fn insert_resource<R: Resource>(&mut self, resource: R) {
+        self.resources.insert(resource);
+    }
+
+    pub fn get_resource<R: Resource>(&self) -> Option<&R> {
+        self.resources.get::<R>()
+    }
+
+    pub fn get_resource_mut<R: Resource>(&mut self) -> Option<&mut R> {
+        self.resources.get_mut::<R>()
     }
 }
 

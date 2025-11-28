@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::component::{Position, Velocity};
+
 pub type PlayerId = u64;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -11,8 +13,8 @@ pub struct GameState {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EntityState {
     pub id: u64,
-    pub position: (f32, f32),
-    // Add more fields as needed
+    pub position: Position,
+    pub velocity: Velocity, // Add more fields as needed
 }
 
 impl GameState {
@@ -48,7 +50,16 @@ mod tests {
         let mut state = GameState::new(1);
         state.entities.push(EntityState {
             id: 1,
-            position: (10.0, 20.0),
+            position: Position {
+                x: 10.0,
+                y: 20.0,
+                z: 30.0,
+            },
+            velocity: Velocity {
+                x: 1.0,
+                y: 1.0,
+                z: 1.0,
+            },
         });
 
         let filtered = state.filter_by_vision(1);

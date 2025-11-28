@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub enum KeyCode {
     W,
     A,
@@ -13,14 +13,14 @@ pub enum KeyCode {
     // Add more as needed
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub enum MouseButton {
     Left,
     Right,
     Middle,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Input {
     keys_pressed: HashSet<KeyCode>,
     keys_just_pressed: HashSet<KeyCode>,
@@ -102,9 +102,9 @@ impl Input {
 
 pub type PlayerId = u64;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct PlayerInputMap {
-    inputs: HashMap<PlayerId, Input>,
+    pub inputs: HashMap<PlayerId, Input>,
 }
 
 impl PlayerInputMap {
