@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum KeyCode {
@@ -97,6 +97,41 @@ impl Input {
         self.keys_just_released.clear();
         self.mouse_buttons_just_pressed.clear();
         self.mouse_buttons_just_released.clear();
+    }
+}
+
+pub type PlayerId = u64;
+
+#[derive(Default)]
+pub struct PlayerInputMap {
+    inputs: HashMap<PlayerId, Input>,
+}
+
+impl PlayerInputMap {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn get(&self, player_id: PlayerId) -> Option<&Input> {
+        self.inputs.get(&player_id)
+    }
+
+    pub fn get_mut(&mut self, player_id: PlayerId) -> Option<&mut Input> {
+        self.inputs.get_mut(&player_id)
+    }
+
+    pub fn insert(&mut self, player_id: PlayerId, input: Input) {
+        self.inputs.insert(player_id, input);
+    }
+
+    pub fn get_or_insert(&mut self, player_id: PlayerId) -> &mut Input {
+        self.inputs.entry(player_id).or_insert_with(Input::new)
+    }
+
+    pub fn clear_all_just_pressed_released(&mut self) {
+        for input in self.inputs.values_mut() {
+            input.clear_just_pressed_released();
+        }
     }
 }
 

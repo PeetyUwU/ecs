@@ -3,6 +3,7 @@ pub mod column;
 pub mod component;
 pub mod entity;
 pub mod event_bus;
+pub mod game_state;
 pub mod input;
 pub mod query;
 pub mod resources;
